@@ -1,7 +1,14 @@
-<?php 
+<?php
+    session_start(); // luon o tren cung
+    if(!isset($_SESSION["user"])) {
+      header("location:login.php");
+    }
+    include_once('model/user.php');
+    $current_user = unserialize($_SESSION["user"]); 
     include_once('header.php');
     include_once('nav.php');
-	include_once('model/book.php');
+    include_once('model/book.php');
+  
 
 	if(isset($_POST['create'])) {
         Book::create($_REQUEST["title"], $_REQUEST["price"], $_REQUEST["author"], $_REQUEST["year"]);
@@ -107,6 +114,12 @@
 </div>
 
 <div class="container pt-5">
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+      Chào bạn: <strong><?php echo $current_user->fullName; ?></strong> 
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
     <button data-toggle="modal" data-target="#createModal" class="btn btn-outline-info float-right"><i class="fas fa-plus-circle"></i> Thêm</button>
     <form action="" method="GET">
         <div class="form-group">
