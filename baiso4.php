@@ -31,10 +31,24 @@
 		
 	}
 
+  $countBooks = Book::count_book();
+  $book_each_page = Book::get_book_each_page();
+  $total_page = 0;
+  if($countBooks %  $book_each_page == 0) {
+    $total_page = $countBooks /  $book_each_page;
+  }
+  else {
+    $total_page = $countBooks /  $book_each_page + 1;
+  }
+  $page = 1;
+  if(isset($_REQUEST['page'])) {
+    $page = $_REQUEST['page'];
+  }
+
 	if(strpos($_SERVER['REQUEST_URI'], "search"))
-		$books = Book::getList($_REQUEST['search']);
+		$books = Book::getList($_REQUEST['search'], $page);
 	else {
-		$books = Book::getList(null);
+		$books = Book::getList(null,  $page);
 	}
 ?>
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -161,6 +175,26 @@
             ?>
         </tbody>
     </table>
+
+    <nav aria-label="...">
+      <ul class="pagination justify-content-center">
+        <li class="page-item <?php echo ($page == 1 ? "disabled" : "") ?>"  >
+          <a id="pre-page" href="baiso4?page=<?php echo $page - 1 ?>" class="page-link">Previous </a>
+        </li>
+        <?php 
+          for($i = 1; $i <= $total_page; $i++) {
+            if($i == $page) {
+              echo '<li class="page-item active"><a class="page-link" href="baiso4?page=' . $i . '">' .$i . '</a> </li>';
+            }
+            else {
+              echo '<li class="page-item"><a class="page-link" href="baiso4?page=' . $i . '">' .$i . '</a> </li>';
+            }
+          }?>
+        <li class="page-item <?php echo ($page == $total_page ? "disabled" : "") ?>">
+          <a id="next-page" href="baiso4?page=<?php echo $page + 1 ?>" class="page-link">Next</a>
+        </li>
+      </ul>
+    </nav>
 </div>
 <?php 
     include_once('footer.php');
@@ -188,11 +222,11 @@
 		
 	});
 
-    $(".btn-edit").on("click", function() {
-        $("#hidden-id").val($(this).parents("tr").attr("data-id"));
-        $("#e-title").val($(this).parents("tr").find(".book-title").text());
-        $("#e-price").val($(this).parents("tr").find(".book-price").text());
-        $("#e-author").val($(this).parents("tr").find(".book-author").text());
-        $("#e-year").val(parseInt($(this).parents("tr").find(".book-year").text()));
-    })
+  $(".btn-edit").on("click", function() {
+      $("#hidden-id").val($(this).parents("tr").attr("data-id"));
+      $("#e-title").val($(this).parents("tr").find(".book-title").text());
+      $("#e-price").val($(this).parents("tr").find(".book-price").text());
+      $("#e-author").val($(this).parents("tr").find(".book-author").text());
+      $("#e-year").val(parseInt($(this).parents("tr").find(".book-year").text()));
+  })
 </script>

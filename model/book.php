@@ -6,7 +6,7 @@ class Book {
     var $author;
     var $year;
     
-    
+
     public function __construct($id, $title, $price, $author, $year)
     {
         $this->id = $id;
@@ -29,6 +29,20 @@ class Book {
             if($id > $max_id) $max_id = $id;
         }
         return $max_id;
+    }
+
+    static function get_book_each_page() {
+        return 2;
+    }
+    static function count_book() {
+        $data = Book::get_data();
+        $count = 0;;
+        foreach($data as $key => $value){
+            if (strlen($value) > 1) {
+                $count += 1;
+            }
+        }
+        return $count;
     }
 
     static function create($title, $price, $author, $year) {
@@ -72,10 +86,9 @@ class Book {
         file_put_contents("data/book.txt", $str_data);
     }
 
-    static function getList($search = null){
+    static function getList($search = null, $page = 1){
         $data = file("data/book.txt");
         $arrBook = [];
-
         foreach($data as $key => $value){
             if (strlen($value) > 1) {
                 $row = explode("#",$value);
@@ -87,17 +100,7 @@ class Book {
                 $arrBook[] = new Book($row[0], $row[1],$row[2],$row[3],$row[4]);
             }
         }
-        return $arrBook;
+        $offset = Book::get_book_each_page() * ($page-1);
+        return array_splice($arrBook, $offset, Book::get_book_each_page());
     }
-    // static function add($id,$price,$title,$author,$year){
-    //     $myfile = fopen("data/book.txt", "w") or die("Unable to open file!");
-    //     $data = file("data/book.txt");
-    //     $data[] = $id."#".$title."#".$price."#".$author."#".$year."\n";
-    //     fwrite($myfile, $data);
-    //     fclose($myfile);
-    // }
-
-    // 1#OOP in Java#20000#Nguyen Hoang Ha#2016
-    // 2#OOP in C++#30000#Nguyen Van Trung Ha#2017
-    // 3#OOP in PHP#40000#Nguyen Dung#2016
 }
