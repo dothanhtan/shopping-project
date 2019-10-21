@@ -17,10 +17,12 @@ class Book {
     }
 
     static function get_data() {
+        // use for file
         return $data = file("data/book.txt");
     }
 
     static function get_max_id() {
+        // use for file
         $data = Book::get_data();
         $max_id = 1;
         foreach($data as $key => $value){
@@ -34,7 +36,9 @@ class Book {
     static function get_book_each_page() {
         return 2;
     }
+
     static function count_book() {
+        // use for file
         $data = Book::get_data();
         $count = 0;;
         foreach($data as $key => $value){
@@ -45,11 +49,36 @@ class Book {
         return $count;
     }
 
+    static function countBookFromDB() {
+        $con = Book::connectToDB();
+        $sql = "SELECT * FROM Book";
+        $result = $con->query($sql);
+        return $result->num_rows;
+    }
+
+    static function connectToDB() {
+        $con = new mysqli("localhost", "root", "", "BookManager");
+        $con->set_charset("utf8");
+        if($con->connect_error)
+            die("Ket noi that bai khi tao moi. Chi tiet: " . $con->connect_error);
+        return $con;
+    }
+
     static function create($title, $price, $author, $year) {
+        // use for file
         $id = Book::get_max_id() + 1;
         $data = file_get_contents("data/book.txt");
 		$data .= "\n". $id. "#". $title . "#" . $price . "#" . $author . '#' . $year;
 		file_put_contents("data/book.txt", $data);
+    }
+
+    static function createToDB($title, $price, $author, $year) {
+        $con = Book::connectToDB();
+
+        $sql = "INSERT INTO Book (Title, Price, Author, Year) VALUES ('$title', $price, '$author', $year)";
+        $result = $con->query($sql);
+
+        $con->close();
     }
 
     static function edit($id, $title, $price, $author, $year) {
@@ -72,7 +101,17 @@ class Book {
         file_put_contents("data/book.txt", $str_data);
     }
 
+    static function editToDB($id, $title, $price, $author, $year) {
+        $con = Book::connectToDB();
+        
+        $sql = "UPDATE Book SET Title = '$title', Price = $price, Author = '$author', Year = $year WHERE Book.ID = $id";
+        $result = $con->query($sql);
+
+        $con->close();
+    }
+
     static function delete($id) {
+        // use for file
         $id = (int)$id;
         $data = Book::get_data();
         $str_data = "";
@@ -86,7 +125,17 @@ class Book {
         file_put_contents("data/book.txt", $str_data);
     }
 
+    static function deleteToDB($id) {
+        $con = Book::connectToDB();
+        
+        $sql = "DELETE FROM Book WHERE Book.ID = $id";
+        $result = $con->query($sql);
+
+        $con->close();
+    }
+
     static function getList($search = null, $page = 1){
+        // use for file
         $data = file("data/book.txt");
         $arrBook = [];
         foreach($data as $key => $value){
@@ -100,6 +149,25 @@ class Book {
                 $arrBook[] = new Book($row[0], $row[1],$row[2],$row[3],$row[4]);
             }
         }
+        $offset = Book::get_book_each_page() * ($page-1);
+        return array_splice($arrBook, $offset, Book::get_book_each_page());
+    }
+
+    static function getListFromDB($search = null, $page = 1) {
+        $con = Book::connectToDB();
+        
+        $sql = "SELECT * FROM Book";
+        $result = $con->query($sql);
+        $arrBook = [];
+        if($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()){
+                $book = new Book($row["ID"], $row["Title"],$row["Price"],$row["Author"],$row["Year"]);
+                array_push($arrBook, $book);
+            }
+        }
+
+        $con->close();
+
         $offset = Book::get_book_each_page() * ($page-1);
         return array_splice($arrBook, $offset, Book::get_book_each_page());
     }

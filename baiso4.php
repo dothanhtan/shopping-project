@@ -11,27 +11,31 @@
   
 
 	if(isset($_POST['create'])) {
-        Book::create($_REQUEST["title"], $_REQUEST["price"], $_REQUEST["author"], $_REQUEST["year"]);
+    //Book::create($_REQUEST["title"], $_REQUEST["price"], $_REQUEST["author"], $_REQUEST["year"]);
+    Book::createToDB($_REQUEST["title"], $_REQUEST["price"], $_REQUEST["author"], $_REQUEST["year"]);
 	}
 	else {
 
     }
     
     if(isset($_POST['edit'])) {
-        Book::edit($_REQUEST["id"], $_REQUEST["title"], $_REQUEST["price"], $_REQUEST["author"], $_REQUEST["year"]);
+      //Book::createToDB($_REQUEST["title"], $_REQUEST["price"], $_REQUEST["author"], $_REQUEST["year"]);
+      Book::editToDB($_REQUEST["id"], $_REQUEST["title"], $_REQUEST["price"], $_REQUEST["author"], $_REQUEST["year"]);
 	}
 	else {
 
 	}
 
 	if(isset($_REQUEST['delete'])) {
-        Book::delete($_REQUEST['delete']);
+    //Book::delete($_REQUEST['delete']);
+    Book::deleteToDB($_REQUEST['delete']);
 	}
 	else {
 		
 	}
 
-  $countBooks = Book::count_book();
+  //$countBooks = Book::count_book();
+  $countBooks = Book::countBookFromDB();
   $book_each_page = Book::get_book_each_page();
   $total_page = 0;
   if($countBooks %  $book_each_page == 0) {
@@ -46,10 +50,12 @@
   }
 
 	if(strpos($_SERVER['REQUEST_URI'], "search"))
-		$books = Book::getList($_REQUEST['search'], $page);
+    //$books = Book::getList($_REQUEST['search'], $page);
+    $lsFromDB = Book::getListFromDB($_REQUEST['search'], $page);
 	else {
-		$books = Book::getList(null,  $page);
-	}
+    //$books = Book::getList(null,  $page);
+    $lsFromDB = Book::getListFromDB(null,  $page);
+  }
 ?>
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -154,10 +160,10 @@
         </thead>
         <tbody>
             <?php 
-                foreach($books as $key => $value){
+                foreach($lsFromDB as $key => $value){
             ?>
             <tr data-id="<?php echo $value->id ?>">
-                <td><?php echo $key ?></td>
+                <td><?php echo $value->id ?></td>
                 <td class="book-title"><?php echo $value->title?></td>
                 <td class="book-price"><?php echo $value->price?></td>
                 <td class="book-author"><?php echo $value->author?></td>
