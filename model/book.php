@@ -34,7 +34,7 @@ class Book {
     }
 
     static function get_book_each_page() {
-        return 2;
+        return 25;
     }
 
     static function count_book() {
@@ -155,8 +155,14 @@ class Book {
 
     static function getListFromDB($search = null, $page = 1) {
         $con = Book::connectToDB();
+        $sql = "";
+        if($search != null) {
+            $sql = "SELECT * FROM Book WHERE Title LIKE '%$search%' OR Author LIKE '%$search%' OR Price = '$search' OR Year = '$search'";
+        }
+        else {
+            $sql = "SELECT * FROM Book";
+        }
         
-        $sql = "SELECT * FROM Book";
         $result = $con->query($sql);
         $arrBook = [];
         if($result->num_rows > 0) {
