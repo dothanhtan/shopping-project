@@ -43,13 +43,13 @@
     <div id="collapsePHP" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Bai hoc:</h6>
-        <a class="collapse-item" href="/FirstProject/index">Bai so 1</a>
-        <a class="collapse-item" href="/FirstProject/Form_caculate">Caculater</a>
-        <a class="collapse-item" href="/FirstProject/post_method">Post Method</a>
-        <a class="collapse-item" href="/FirstProject/baiso4">Book</a>
-        <a class="collapse-item" href="/FirstProject/qtht">QTHT</a>
-        <a class="collapse-item" href="/FirstProject/baiso5">Bai so 5</a>
-        <a class="collapse-item" href="/FirstProject/danhba">Danh bạ</a>
+        <a class="collapse-item" href="/php-learning/index">Bai so 1</a>
+        <a class="collapse-item" href="/php-learning/Form_caculate">Caculater</a>
+        <a class="collapse-item" href="/php-learning/post_method">Post Method</a>
+        <a class="collapse-item" href="/php-learning/baiso4">Book</a>
+        <a class="collapse-item" href="/php-learning/qtht">QTHT</a>
+        <a class="collapse-item" href="/php-learning/baiso5">Bai so 5</a>
+        <a class="collapse-item" href="/php-learning/danhba">Danh bạ</a>
       </div>
     </div>
   </li>
@@ -153,7 +153,7 @@
       </button>
 
       <!-- Topbar Search -->
-      <form action="/FirstProject/baiso4.php" method="get" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+      <form action="/php-learning/baiso4.php" method="get" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
           <input name="txtSearch" type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
           <div class="input-group-append">
