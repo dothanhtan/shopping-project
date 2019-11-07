@@ -57,7 +57,7 @@ class Book {
     }
 
     static function connectToDB() {
-        $con = new mysqli("localhost", "root", "", "BookManager");
+        $con = new mysqli("localhost:3308", "root", "", "BookManager");
         $con->set_charset("utf8");
         if($con->connect_error)
             die("Ket noi that bai khi tao moi. Chi tiet: " . $con->connect_error);

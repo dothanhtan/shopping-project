@@ -13,7 +13,7 @@ class User {
     }
 
     static function connectToDB() {
-        $con = new mysqli("localhost", "root", "", "Contact");
+        $con = new mysqli("localhost:3308", "root", "", "Contact");
         $con->set_charset("utf8");
         if($con->connect_error)
             die("Ket noi that bai khi tao moi. Chi tiet: " . $con->connect_error);
@@ -31,7 +31,6 @@ class User {
         $con = User::connectToDB();
 
         $sql = "SELECT * FROM User WHERE User.UserName = '$userName' AND User.PassWord = '$passWord'";
-        echo $sql;
         $result = $con->query($sql);
         if($result->num_rows > 0) {
             while($row = $result->fetch_assoc()){

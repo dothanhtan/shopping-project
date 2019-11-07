@@ -4,8 +4,22 @@
       header("location:login.php");
     }
     include_once('model/user.php');
+    include_once('model/label.php');
+    include_once('model/danhba.php');
+    
     $current_user = unserialize($_SESSION["user"]); 
     include_once('header.php');
+    $labels = Label::getLabelByUser($current_user->id);
+    if(isset($_REQUEST['label_id'])) {
+        $contacts = Contact::getContactByLabel((int)$_REQUEST['label_id']);
+    }
+    else if (isset($_REQUEST['contact_info'])) {
+        $contacts = Contact::searchContact($_REQUEST['contact_info'], $current_user->id);
+    }
+    else {
+        $contacts = Contact::getContactByUser($current_user->id);
+    }
+    
 ?>
 
 <div class="container-fluid contact">
@@ -35,14 +49,16 @@
             <a class="nav-link" role="button" href="" data-toggle="collapse" data-target="#collapseLable"><i class="fa fa-chevron-up"></i> Nhãn</a>
             <div id="collapseLable" class="collapse">
                 <ul class="nav flex-column">
+                    <?php 
+                    foreach($labels as $key => $value){
+                    ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa fa-tag"></i> Người thân</a>
+                        <a class="nav-link" href="danhba.php?label_id=<?php echo $value->id ?>"><i class="fa fa-tag"></i> <?php echo $value->name ?></a>
                     </li>
+                    <?php } ?>
+                    
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa fa-tag"></i> Bạn bè</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa fa-plus"></i> Tạo nhãn</a>
+                        <a class="nav-link" href=""><i class="fa fa-plus"></i> Tạo nhãn</a>
                     </li>
                 </ul>
             </div>
@@ -55,7 +71,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-search"></i></span>
                         </div>
-                        <input name="txtContact" type="text" class="form-control" id="search-contact" placeholder="Tìm kiếm">
+                        <input name="contact_info" type="text" class="form-control" id="search-contact" placeholder="Tìm kiếm">
                     </div>
                 </form>
             </div>
@@ -69,36 +85,20 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <?php 
+                    foreach($contacts as $key => $value){
+                    ?>
                     <tr>
                         <td class="contact-name">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="contact-1">
-                                <label class="custom-control-label name" for="contact-1">Đức Phúc</label>
+                                <input type="checkbox" class="custom-control-input" id="contact-<?php echo $value->id ?>">
+                                <label class="custom-control-label name" for="contact-<?php echo $value->id ?>"><?php echo $value->name ?></label>
                             </div>
                         </td>
-                        <td>ducphuc1202@gmail.com</td>
-                        <td>0329322111</td>
+                        <td><?php echo $value->email ?></td>
+                        <td><?php echo $value->phone ?></td>
                     </tr>
-                    <tr>
-                        <td class="contact-name">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="contact-2">
-                                <label class="custom-control-label name" for="contact-2">Đình Trọng</label>
-                            </div>
-                        </td>
-                        <td>dinhtrong1202@gmail.com</td>
-                        <td>0329322322</td>
-                    </tr>
-                    <tr>
-                        <td class="contact-name">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="contact-3">
-                                <label class="custom-control-label name" for="contact-3">Văn Toàn</label>
-                            </div>
-                        </td>
-                        <td>vantoan@gmail.com</td>
-                        <td>0329322432</td>
-                    </tr>
+                    <?php } ?>
                 </tbody>
                 </table>
             </div>
