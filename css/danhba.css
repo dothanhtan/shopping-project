@@ -1,0 +1,47 @@
+.fa {
+    margin-right: 5px;
+}
+.contact-header {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+.contact-title {
+    color: #000;
+}
+.btn-create-contact {
+    box-shadow:  1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
+    background-color: #fff;
+    color: black;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 20px;
+    transition: 0.3s;
+}
+.btn-create-contact:hover {
+    color: #fff;
+    background-color: blue;
+    transition: 0.3s;
+}
+.menu-contact {
+    margin: 10px auto;
+}
+.menu-contact .nav-link{
+    color: #000;
+}
+.list-active {
+    color: #1a73e8 !important;
+    background-color: #E6F1FE;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.search-bar {
+    height: 46px;
+}
+.search-bar #search-contact {
+    height: 100%;
+}
+
+table {
+    color: red;
+}

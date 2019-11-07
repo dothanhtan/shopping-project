@@ -19,7 +19,7 @@
     }
     
     if(isset($_POST['edit'])) {
-      //Book::createToDB($_REQUEST["title"], $_REQUEST["price"], $_REQUEST["author"], $_REQUEST["year"]);
+      //Book::edit($_REQUEST["title"], $_REQUEST["price"], $_REQUEST["author"], $_REQUEST["year"]);
       Book::editToDB($_REQUEST["id"], $_REQUEST["title"], $_REQUEST["price"], $_REQUEST["author"], $_REQUEST["year"]);
 	}
 	else {

@@ -46,8 +46,10 @@
         <a class="collapse-item" href="/FirstProject/index">Bai so 1</a>
         <a class="collapse-item" href="/FirstProject/Form_caculate">Caculater</a>
         <a class="collapse-item" href="/FirstProject/post_method">Post Method</a>
-        <a class="collapse-item" href="/FirstProject/baiso4">Object</a>
+        <a class="collapse-item" href="/FirstProject/baiso4">Book</a>
         <a class="collapse-item" href="/FirstProject/qtht">QTHT</a>
+        <a class="collapse-item" href="/FirstProject/baiso5">Bai so 5</a>
+        <a class="collapse-item" href="/FirstProject/danhba">Danh bạ</a>
       </div>
     </div>
   </li>
