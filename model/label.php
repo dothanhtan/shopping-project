@@ -33,6 +33,44 @@
             $con->close();
             return $arrLabel;
         }
+
+        static function countContactByLabel($label_id){
+            $con = Label::connectToDB();
+
+            $sql = "SELECT * FROM Contact_Label WHERE Contact_Label.LabelID = $label_id ";
+            $result = $con->query($sql);
+            $con->close();
+            return $result->num_rows;
+        }
+
+        static function create($name, $user_id){
+            $con = Label::connectToDB();
+            $res = new stdClass();
+
+            // Check if label name is already exists
+            $arrLabel = Label::getLabelByUser($user_id);
+            foreach($arrLabel as $key => $value){
+                if($value->name == $name) {
+                    $res->status = 'Exists';
+                    return $res;
+                }
+            }
+
+            // INSERT TO DB
+            $sql = "INSERT INTO Label (Name, UserID) VALUES ('$name', $user_id)";
+            $result = $con->query($sql);            
+            if($result) {
+                $id = $con->insert_id;
+                $label = new Label($id, $name, $user_id);
+                $con->close();
+                $res->status = 'Success';
+                $res->label = $label;
+            }
+            else {
+                $res->status = 'Error';
+            }
+            return $res;
+        }
     }
 
 ?>

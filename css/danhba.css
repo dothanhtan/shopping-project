@@ -1,6 +1,9 @@
 .fa {
     margin-right: 5px;
 }
+.text-black {
+    color: #202124 !important;
+}
 .contact-header {
     font-size: 28px;
     margin-bottom: 20px;
@@ -9,18 +12,23 @@
     color: #000;
 }
 .btn-create-contact {
-    box-shadow:  1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
+    box-shadow:  0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
     background-color: #fff;
     color: black;
-    padding: 12px 24px;
+    padding: 12px 26px;
     border: none;
     border-radius: 20px;
     transition: 0.3s;
 }
 .btn-create-contact:hover {
-    color: #fff;
-    background-color: blue;
+    box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
     transition: 0.3s;
+}
+.btn-create-contact .fa-plus {
+    background-image: linear-gradient(to right, #fc466b, #0984e3);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: rgba(9, 132, 227, 0.2);
 }
 .menu-contact {
     margin: 10px auto;
@@ -42,6 +50,3 @@
     height: 100%;
 }
 
-table {
-    color: red;
-}
