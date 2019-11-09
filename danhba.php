@@ -33,14 +33,30 @@
 
 <div class="container contact">
     
-
     <div class="row pt-5">
         <div class="col-sm-3 left-hand-side">
             <div class="contact-header">
-                <span><i class="fa fa-bars"></i></span>
+                <span id="btn-toggle-sidebar"><i class="fa fa-bars"></i></span>
                 <img class="gb_la gb_7d" alt="" aria-hidden="true" src="https://www.gstatic.com/images/branding/product/1x/contacts_48dp.png" srcset="https://www.gstatic.com/images/branding/product/1x/contacts_48dp.png 1x, https://www.gstatic.com/images/branding/product/2x/contacts_48dp.png 2x " style="width:40px;height:40px">
                 <span class="contact-title">Danh bạ</span>
             </div>
+        </div>
+        <div class="col-sm-9 right-hand-side">
+            <div class="search-box">
+                <form action="">
+                    <div class="input-group mb-3 search-bar">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                        </div>
+                        <input name="contact_info" type="text" class="form-control" id="search-contact" placeholder="Tìm kiếm liên hệ" autocomplete="off">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-3 left-hand-side" id="sidebar-contact">
             <button class="btn-create-contact"><i class="fa fa-plus"></i> <span>Tạo liên hệ</span> </button>
             <ul class="nav flex-column menu-contact">
                 <li class="nav-item list-active">
@@ -74,17 +90,7 @@
             </div>
         </div>
 
-        <div class="col-sm-9 right-hand-side">
-            <div class="search-box">
-                <form action="">
-                    <div class="input-group mb-3 search-bar">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-search"></i></span>
-                        </div>
-                        <input name="contact_info" type="text" class="form-control" id="search-contact" placeholder="Tìm kiếm">
-                    </div>
-                </form>
-            </div>
+        <div class="col-sm-9 right-hand-side main-content">
             <div class="contact-list">
             <table class="table table-hover">
                 <thead>
@@ -172,6 +178,13 @@
   <script>
       $(document).ready(function(){
 
+        // Toggle sidebar
+        $('#btn-toggle-sidebar').click( function() {
+
+            $("#sidebar-contact").toggle();
+            $(".main-content").toggleClass("active-sidebar");
+        });
+
         $(document).on("click", ".btn-create-label", function(){
           $.confirm({
             title: 'Tạo nhãn',
@@ -248,52 +261,86 @@
         })
 
         $(document).on("click", ".btn-create-contact", function(){
-          $.confirm({
-            title: 'Tạo liên hệ mới',
-            content: '<form> <div class="form-group"> <label for="contact-label">Nhãn</label> <select class="form-control" id="contact-label"> <option value="1">Bạn bè</option> <option value="2">Người thân</option> </select> </div> <div class="form-group"> <label for="contact-name">Tên liên hệ</label> <input type="text" class="form-control" id="contact-name" placeholder="contact"> </div> <div class="form-group"> <label for="contact-phone">Số điện thoại</label> <input type="text" class="form-control" id="contact-phone" placeholder="0123456789"> </div> <div class="form-group"> <label for="contact-email">Email</label> <input type="email" class="form-control" id="contact-email" placeholder="contact@example.com"> </div> </form>',
-            width: 300,
-            buttons: {
-              formSubmit: {
-                  text: 'Tạo',
-                  btnClass: 'btn-green',
-                  action: function () {
-                    contact_name = this.$content.find('#contact-name').val();
-                    contact_phone = this.$content.find('#contact-phone').val();
-                    contact_email = this.$content.find('#contact-email').val();
-                    contact_label = this.$content.find('#contact-label').val();
-                    if(contact_name != null && contact_name != "" && contact_phone != null && contact_phone != "") {
-                        // do something here
-                        if(contact_phone.length != 10) {
-                          $.alert("Số điện thoại không hợp lệ");
-                          return false;
+            var select_label = '<select class="form-control" id="contact-label">'
+            <?php foreach($labels as $key => $value){ ?>
+                select_label += '<option value="<?php echo $value->id ?>"><?php echo $value->name ?></option>'
+            <?php } ?>
+            select_label += '</select>'
+            $.confirm({
+                title: 'Tạo liên hệ mới',
+                content: '<form> <div class="form-group"> <label for="contact-label"><i class="fa fa-tag"></i>Nhãn</label>' + select_label +  '</div> <div class="form-group"> <label for="contact-name"><i class="fa fa-address-card"></i> Tên liên hệ</label> <input type="text" class="form-control" id="contact-name" placeholder="contact"> </div> <div class="form-group"> <label for="contact-phone"><i class="fa fa-phone"></i> Số điện thoại</label> <input type="text" class="form-control" id="contact-phone" placeholder="0123456789"> </div> <div class="form-group"> <label for="contact-email"><i class="fa fa-envelope"></i> Email</label> <input type="email" class="form-control" id="contact-email" placeholder="contact@example.com"> </div> </form>',
+                width: 600,
+                useBootstrap: false,
+                buttons: {
+                formSubmit: {
+                    text: 'Tạo',
+                    btnClass: 'btn-green',
+                    action: function () {
+                        contact_name = this.$content.find('#contact-name').val();
+                        contact_phone = this.$content.find('#contact-phone').val();
+                        contact_email = this.$content.find('#contact-email').val();
+                        contact_label = this.$content.find('#contact-label').val();
+                        if(contact_name != null && contact_name != "" && contact_phone != null && contact_phone != "") {
+                            // do something here
+                            if(contact_phone.length != 10) {
+                            $.alert("Số điện thoại không hợp lệ");
+                            return false;
+                            }
+                            else {
+                                $.ajax({
+                                    url: "./controller/danhba_controller.php",
+                                    method: "POST",
+                                    data: {
+                                        new_contact: {
+                                            name: contact_name,
+                                            phone: contact_phone,
+                                            email: contact_email,
+                                            user_id: <?php echo $current_user->id ?>,
+                                            label_id: contact_label
+                                        }
+                                    },
+                                    success: function(res){
+                                        console.log(res);
+                                        var result = JSON.parse(res);
+                                        console.log(result);
+                                        if(result.status == "Success") {
+                                            
+                                            $.alert("Tạo liên hệ mới thành công");
+                                        }
+                                        else if (result.status == "Exists") {
+                                            $.alert("Số điện thoại đã tồn tại");
+                                        }
+                                        else {
+                                            $.alert("Tạo liên hệ mới thất bại");
+                                        }
+                                    },
+                                    error: function(){
+                                        $.alert("Tạo liên hệ mới thất bại");
+                                    }
+                                })                       
+                            }
+                        } else {
+                            $.alert("Tên và số điện thoại không thể để trống");
+                            return false;
                         }
-                        else {
-                          // do something here
-                          $.alert("Tạo liên hệ mới thành công");
-                        }
-
-                    } else {
-                        $.alert("Tên và số điện thoại không thể để trống");
-                        return false;
                     }
-                  }
-              },
-              cancel: {
-                text: 'Hủy',
-                action: function () {
-                  //close
+                },
+                cancel: {
+                    text: 'Hủy',
+                    action: function () {
+                    //close
+                    }
                 }
-              }
-            },
-            onContentReady: function () {
-            // bind to events
-              var jc = this;
-              this.$content.find('.formLabel').on('submit', function (e) {
-                  // if the user submits the form by pressing enter in the field.
-                  e.preventDefault();
-                  jc.$$formSubmit.trigger('click'); // reference the button and click it
-              });
-            }
+                },
+                onContentReady: function () {
+                // bind to events
+                var jc = this;
+                this.$content.find('.formLabel').on('submit', function (e) {
+                    // if the user submits the form by pressing enter in the field.
+                    e.preventDefault();
+                    jc.$$formSubmit.trigger('click'); // reference the button and click it
+                });
+                }
             });
           return false;
         })

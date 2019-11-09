@@ -71,6 +71,37 @@
             $con->close();
             return $arrContact;
         }
+
+        static function create($name, $phone, $email, $user_id, $label_id) {
+            $con = Contact::connectToDB();
+            $res = new stdClass();
+
+            // Check if contact phone is already exists
+            $arrContact = Contact::getContactByUser($user_id);
+            foreach($arrContact as $key => $value){
+                if($value->phone == $phone) {
+                    $res->status = 'Exists';
+                    return $res;
+                }
+            }
+
+            // INSERT TO DB
+            $sql = "INSERT INTO Contact (Name, Email, Phone, IsChecked, UserID) VALUES ('$name', '$email', '$phone', false, $user_id)";
+            $result = $con->query($sql);
+            $id = $con->insert_id;
+            $sql2 = "INSERT INTO Contact_Label (ContactID, LabelID) VALUES ($id, $label_id)";
+            $result2 = $con->query($sql2);            
+            if($result && $result2) {
+                $contact = new Contact($id, $name, $email, $phone, false, $user_id);
+                $con->close();
+                $res->status = 'Success';
+                $res->contact = $contact;
+            }
+            else {
+                $res->status = 'Error';
+            }
+            return $res;
+        }
     }
 
 ?>

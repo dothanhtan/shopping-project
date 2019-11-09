@@ -1,3 +1,18 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none !important;
+    font-size: 15px;
+    font-weight: 300;
+}
+
+.active-sidebar {
+    flex: 0 0 100% !important;
+    max-width: 100%;
+    transition: 0.3s;
+}
+
 .fa {
     margin-right: 5px;
 }
@@ -5,11 +20,19 @@
     color: #202124 !important;
 }
 .contact-header {
-    font-size: 28px;
     margin-bottom: 20px;
+    display: flex;
+    
+    align-items: center;
+}
+#btn-toggle-sidebar {
+    cursor: pointer;
+    margin-right: 15px;
 }
 .contact-title {
     color: #000;
+    font-size: 28px;
+    margin-left: 5px;
 }
 .btn-create-contact {
     box-shadow:  0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
