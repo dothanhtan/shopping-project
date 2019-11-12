@@ -73,3 +73,17 @@
     height: 100%;
 }
 
+.nav-item {
+    position: relative;
+}
+.nav-item .overlap-label {
+    position: absolute;
+    top: 8px;
+    right: 15px;
+    cursor: pointer;
+    display: none;
+}
+.nav-item:hover .overlap-label {
+    display: block;
+}
+

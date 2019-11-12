@@ -78,8 +78,11 @@
                     foreach($labels as $key => $value){
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="danhba.php?label_id=<?php echo $value->id ?>&label_name=<?php echo $value->name ?>"><i class="fa fa-tag"></i> <?php echo $value->name ?> <span class="badge badge-primary"><?php echo Label::countContactByLabel($value->id) ?></span></a>
-                        
+                        <a class="nav-link text-black" href="danhba.php?label_id=<?php echo $value->id ?>&label_name=<?php echo $value->name ?>"><i class="fa fa-tag"></i> <span class="label-name-text"><?php echo $value->name ?></span> <span class="badge badge-primary"><?php echo Label::countContactByLabel($value->id) ?></span></a>
+                        <div class="overlap-label">
+                            <span class="btn-edit-label"><i class="fa fa-pencil-alt"></i></span>
+                            <span class="btn-delete-label"><i class="fa fa-trash"></i></span>
+                        </div>
                     </li>
                     <?php } ?>
                     
@@ -98,25 +101,36 @@
                         <th scope="col">Tên</th>
                         <th scope="col">Email</th>
                         <th scope="col">Số điện thoại</th>
+                        <th scope="col">Thao tác</th> 
                     </tr>
                 </thead>
                 <tbody>
                     <?php if(isset($_REQUEST['label_id'])) { ?>
                     <tr>
-                        <td colspan="3"><?php echo $label_name ?> (<?php echo $total_contact ?>)</td>
+                        <td colspan="4"><?php echo $label_name ?> (<?php echo $total_contact ?>)</td>
                     </tr>
                     <?php 
                     foreach($contacts as $key => $value){
                     ?>
-                    <tr>
+                    <tr data-id="<?php echo $value->id ?>">
                         <td class="contact-name">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="contact-<?php echo $value->id ?>">
                                 <label class="custom-control-label name" for="contact-<?php echo $value->id ?>"><?php echo $value->name ?></label>
                             </div>
                         </td>
-                        <td><?php echo $value->email ?></td>
-                        <td><?php echo $value->phone ?></td>
+                        <td class="contact-email"><?php echo $value->email ?></td>
+                        <td class="contact-phone"><?php echo $value->phone ?></td>
+                        <td>
+                            <span class="btn-edit-contact"><i class="fa fa-pencil-alt"></i></span>
+                            <span class="btn-delete-contact"><i class="fa fa-trash"></i></span>
+                            <span><svg width="20" height="20" viewBox="0 0 24 24" class=""><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16zM16 17H5V7h11l3.55 5L16 17z"></path></svg></span>
+                            <?php if($value->isChecked) { ?>
+                            <span class="btn-star"><i class="fa fa-star"></i></span>
+                            <?php }else{ ?>
+                            <span class="btn-star"><i class="far fa-star"></i></span>
+                            <?php } ?>
+                        </td>
                     </tr>
                     <?php } ?>
                     <?php } else { ?>
@@ -127,15 +141,21 @@
                     foreach($contacts as $key => $value){
                         if($value->isChecked == "1") {
                     ?>
-                    <tr>
+                    <tr data-id="<?php echo $value->id ?>">
                         <td class="contact-name">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="contact-<?php echo $value->id ?>">
                                 <label class="custom-control-label name" for="contact-<?php echo $value->id ?>"><?php echo $value->name ?></label>
                             </div>
                         </td>
-                        <td><?php echo $value->email ?></td>
-                        <td><?php echo $value->phone ?></td>
+                        <td class="contact-email"><?php echo $value->email ?></td>
+                        <td class="contact-phone"><?php echo $value->phone ?></td>
+                        <td>
+                            <span class="btn-edit-contact"><i class="fa fa-pencil-alt"></i></span>
+                            <span class="btn-delete-contact"><i class="fa fa-trash"></i></span>
+                            <span><svg width="20" height="20" viewBox="0 0 24 24" class=""><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16zM16 17H5V7h11l3.55 5L16 17z"></path></svg></span>
+                            <span class="btn-star"><i class="fa fa-star"></i></span>
+                        </td>
                     </tr>
                     <?php } ?>
                     <?php } ?>
@@ -145,15 +165,21 @@
                     <?php 
                     foreach($contacts as $key => $value){
                     ?>
-                    <tr>
+                    <tr data-id="<?php echo $value->id ?>">
                         <td class="contact-name">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="contact-<?php echo $value->id ?>">
                                 <label class="custom-control-label name" for="contact-<?php echo $value->id ?>"><?php echo $value->name ?></label>
                             </div>
                         </td>
-                        <td><?php echo $value->email ?></td>
-                        <td><?php echo $value->phone ?></td>
+                        <td class="contact-email"><?php echo $value->email ?></td>
+                        <td class="contact-phone"><?php echo $value->phone ?></td>
+                        <td>
+                            <span class="btn-edit-contact"><i class="fa fa-pencil-alt"></i></span>
+                            <span class="btn-delete-contact"><i class="fa fa-trash"></i></span>
+                            <span><svg width="20" height="20" viewBox="0 0 24 24" class=""><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16zM16 17H5V7h11l3.55 5L16 17z"></path></svg></span>
+                            <span class="btn-star"><i class="far fa-star"></i></span>   
+                        </td>
                     </tr>
                     <?php } ?>
                     <?php } ?>
@@ -191,7 +217,7 @@
             content: '' +
             '<form action="" class="formLabel">' +
             '<div class="form-group">' +
-            '<label>Nhập tên label</label>' +
+            '<label>Tên nhãn</label>' +
             '<input type="text" placeholder="Tên nhãn mới" class="label-name form-control"/>' +
             '</div>' +
             '</form>',
@@ -300,9 +326,7 @@
                                         }
                                     },
                                     success: function(res){
-                                        console.log(res);
                                         var result = JSON.parse(res);
-                                        console.log(result);
                                         if(result.status == "Success") {
                                             
                                             $.alert("Tạo liên hệ mới thành công");
@@ -343,6 +367,143 @@
                 }
             });
           return false;
+        })
+
+        $(document).on("click", ".btn-edit-contact", function(){
+            var id = $(this).parents("tr").attr("data-id");
+            var name = $(this).parents("tr").find(".contact-name .name").text();
+            var phone = $(this).parents("tr").find(".contact-phone").text();
+            var email = $(this).parents("tr").find(".contact-email").text();
+            $.confirm({
+                title: 'Chỉnh sửa liên hệ',
+                content: '<form data-id="' + id + '"> <div class="form-group"> <label for="contact-name"><i class="fa fa-address-card"></i> Tên liên hệ</label> <input type="text" class="form-control" id="contact-name" placeholder="contact" value="' + name + '"> </div> <div class="form-group"> <label for="contact-phone"><i class="fa fa-phone"></i> Số điện thoại</label> <input type="text" class="form-control" id="contact-phone" placeholder="0123456789" value="' + phone + '"> </div> <div class="form-group"> <label for="contact-email"><i class="fa fa-envelope"></i> Email</label> <input type="email" class="form-control" id="contact-email" placeholder="contact@example.com" value="' + email + '"> </div> </form>',
+                width: 600,
+                useBootstrap: false,
+                buttons: {
+                formSubmit: {
+                    text: 'Tạo',
+                    btnClass: 'btn-green',
+                    action: function () {
+                        contact_name = this.$content.find('#contact-name').val();
+                        contact_phone = this.$content.find('#contact-phone').val();
+                        contact_email = this.$content.find('#contact-email').val();
+                        contact_label = this.$content.find('#contact-label').val();
+                        if(contact_name != null && contact_name != "" && contact_phone != null && contact_phone != "") {
+                            // do something here
+                            if(contact_phone.length != 10) {
+                            $.alert("Số điện thoại không hợp lệ");
+                            return false;
+                            }
+                            else {
+                                                     
+                            }
+                        } else {
+                            $.alert("Tên và số điện thoại không thể để trống");
+                            return false;
+                        }
+                    }
+                },
+                cancel: {
+                    text: 'Hủy',
+                    action: function () {
+                    //close
+                    }
+                }
+                },
+                onContentReady: function () {
+                // bind to events
+                var jc = this;
+                this.$content.find('.formLabel').on('submit', function (e) {
+                    // if the user submits the form by pressing enter in the field.
+                    e.preventDefault();
+                    jc.$$formSubmit.trigger('click'); // reference the button and click it
+                });
+                }
+            });
+        })
+
+        $(document).on("click", ".btn-delete-contact", function(){
+            $.confirm({
+                title: 'Xóa liên hệ',
+                content: 'Bạn có muốn xóa liên hệ này?',
+                buttons: {
+                    confirm: {
+                        text: 'Đồng ý',
+                        btnClass: 'btn-red',
+                        action: function () {
+
+                        }
+                    },
+                    cancel: {
+                        text: 'Hủy',
+                        action: function () {
+                        //close
+                        }
+                    }
+                }
+            });
+        })
+
+
+        $(document).on("click", ".btn-edit-label", function(){
+            var lb_name = $(this).parents(".nav-item").find(".label-name-text").text();
+            $.confirm({
+                title: 'Chỉnh sửa nhãn',
+                content: '' +
+                '<form action="" class="formLabel">' +
+                '<div class="form-group">' +
+                '<label>Tên nhãn</label>' +
+                '<input type="text" placeholder="Tên nhãn mới" class="label-name form-control" value="' + lb_name + '"/>' +
+                '</div>' +
+                '</form>',
+                buttons: {
+                formSubmit: {
+                    text: 'Cập nhật',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        
+                    }
+                },
+                cancel: {
+                    text: 'Hủy',
+                    action: function () {
+                    //close
+                    }
+                }
+                },
+                onContentReady: function () {
+                // bind to events
+                var jc = this;
+                this.$content.find('.formLabel').on('submit', function (e) {
+                    // if the user submits the form by pressing enter in the field.
+                    e.preventDefault();
+                    jc.$$formSubmit.trigger('click'); // reference the button and click it
+                });
+                }
+                });
+            return false;
+        })
+
+        $(document).on("click", ".btn-delete-label", function(){
+            $.confirm({
+                title: 'Xóa nhãn',
+                content: 'Bạn có muốn xóa nhãn này?',
+                buttons: {
+                    confirm: {
+                        text: 'Đồng ý',
+                        btnClass: 'btn-red',
+                        action: function () {
+
+                        }
+                    },
+                    cancel: {
+                        text: 'Hủy',
+                        action: function () {
+                        //close
+                        }
+                    }
+                }
+            });
         })
 
       })
