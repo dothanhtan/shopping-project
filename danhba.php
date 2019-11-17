@@ -381,7 +381,7 @@
                 useBootstrap: false,
                 buttons: {
                 formSubmit: {
-                    text: 'Tạo',
+                    text: 'Cập nhật',
                     btnClass: 'btn-green',
                     action: function () {
                         contact_name = this.$content.find('#contact-name').val();

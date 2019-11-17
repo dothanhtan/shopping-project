@@ -56,7 +56,7 @@
             <!-- Nested Row within Card Body -->
             <div class="row">
               <div class="col-lg-6 d-none d-lg-block">
-                <img src="https://images.wallpaperscraft.com/image/japan_shirakawa_houses_mountains_trees_112963_720x1280.jpg" class="img-fluid">  
+                <img src="images/logo.png" class="img-fluid">  
               </div>
               <div class="col-lg-6">
                 <div class="p-5">
