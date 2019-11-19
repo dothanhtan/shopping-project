@@ -202,7 +202,7 @@
 
                 <div class="row product-list">
                     <?php foreach($products as $key => $value){ ?>
-                    <div class="col-md-6 product-item">
+                    <div class="col-md-6 product-item" data-id="<?php echo $value->id ?>">
                         <figure class="card mb-3 py-2" style="max-width: 540px;">
                             <div class="row no-gutters">
                                 <div class="col-md-5">
@@ -227,7 +227,7 @@
                                     </div>
                                     
                                     <div class="product-action">
-                                        <button class="btn btn-sm btn-secondary btn-product"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ</button>
+                                        <button class="btn btn-sm btn-secondary btn-product btn-add-to-cart"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ</button>
                                         <a href="show.php?product_id=<?php echo $value->id ?>" class="btn btn-sm btn-secondary text-white btn-icon"><i class="fa fa-eye"></i></a>
                                     </div>
                                 </div>
@@ -281,10 +281,4 @@
 
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
-<script>
-      $(document).ready(function(){
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-      })
-</script>
+<script src="js/shop.js"></script>

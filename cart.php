@@ -4,9 +4,18 @@
       header("location:login.php");
     }
     include_once('model/user.php');
+    include_once('model/cart.php');
     
     $current_user = unserialize($_SESSION["user"]); 
     include_once('header.php');
+
+    $totalPrice = 0;
+    $discount = 0;
+    $carts = [];
+    if(isset($_COOKIE['shop_cart'])) {
+        $str_cookie = '{"products": ' . $_COOKIE['shop_cart'] . "}";
+        $carts = Cart::parseCookie($str_cookie);
+    }
 ?>
 <header class="section-header">
 
@@ -76,6 +85,9 @@
 
         <div class="row">
             <main class="col-md-9">
+                <div class="alert alert-info mt-3">
+                    <i class="icon text-info fa fa-truck"></i> Miễn phí vận chuyển cho đơn hàng từ 150.000 VNĐ
+                </div>
                 <div class="card">
                     <table class="table table-borderless table-shopping-cart">
                         <thead class="text-muted text-center">
@@ -87,15 +99,18 @@
                             </tr>
                         </thead>
                         <tbody class="cart-list">
-                            <tr class="cart-item">
+                            <?php foreach($carts as $key => $value){
+                                $totalPrice += $value->product->sellPrice * $value->quantity;    
+                            ?>
+                            <tr class="cart-item" data-id="<?php echo $value->product->id ?>">
                                 <td>
                                     <figure class="itemside">
-                                        <div class="product-img"><img src="images/sanpham1.png" class="img-sm"></div>
-                                        <figcaption class="info">
-                                            <a href="#" class="title text-dark product-name">Đồng hồ đeo tay</a>
+                                        <div class="product-img"><img src="images/<?php echo $value->product->main_images ?>" class="img-sm"></div>
+                                        <figcaption class="info pl-2">
+                                            <a href="#" class="title text-dark product-name"><?php echo $value->product->name ?></a>
                                             <p class="text-muted">
                                                 <small>Đơn giá: </small>
-                                                <small>32.000</small>
+                                                <small><?php echo number_format($value->product->sellPrice, 0, '.', ',') ?></small>
                                             </p>
                                         </figcaption>
                                     </figure>
@@ -103,22 +118,23 @@
                                 <td>
                                     <div class="content-item-cart w-100"> 
                                         <span class="btn-action btn-shop btn-down"><i class="fa fa-minus"></i></span>
-                                        <span class="btn-action current-quantity">1</span>
+                                        <span class="btn-action current-quantity"><?php echo $value->quantity ?></span>
                                         <span class="btn-action btn-shop btn-up"><i class="fa fa-plus"></i></span>   
                                     </div>
                                 </td>
                                 <td> 
                                     <div class="price-wrap content-item-cart text-center"> 
-                                        <var class="price">64.000</var> 
+                                        <var class="price"><?php echo number_format($value->product->sellPrice * $value->quantity, 0, '.', ',') ?></var> 
                                     </div> <!-- price-wrap .// -->
                                 </td>
                                 <td class="text-right">
                                     <div class="content-item-cart"> 
-                                        <a data-original-title="Save to Wishlist" title="" class="btn btn-light" data-toggle="tooltip"> <i class="fa fa-eye text-shop"></i></a> 
-                                        <a class="btn btn-light"> <i class="fa fa-trash text-danger"></i></a>
+                                        <a href="show.php?product_id=<?php echo $value->product->id ?>" data-original-title="Xem sản phẩm" title="" class="btn btn-light" data-toggle="tooltip"> <i class="fa fa-eye text-shop"></i></a> 
+                                        <a data-original-title="Xóa khỏi giỏ hàng" class="btn btn-light btn-delete-from-cart"> <i class="fa fa-trash text-danger" data-toggle="tooltip"></i></a>
                                     </div>
                                 </td>
                             </tr>
+                            <?php } ?>
                         </tbody>
                     </table>
                     <div class="card-body border-top">
@@ -127,9 +143,6 @@
                     </div>	
                 </div> <!-- card.// -->
 
-                <div class="alert alert-info mt-3">
-                    <i class="icon text-info fa fa-truck"></i> Miễn phí vận chuyển cho đơn hàng từ 150.000 VNĐ
-                </div>
 
             </main> <!-- col.// -->
             <aside class="col-md-3">
@@ -152,15 +165,19 @@
                     <div class="card-body">
                             <dl class="dlist-align">
                             <dt>Tổng tiền:</dt>
-                            <dd class="text-right">568.000</dd>
+                            <dd class="text-right" id="total_money"><?php echo number_format($totalPrice, 0, '.', ',') ?></dd>
                             </dl>
                             <dl class="dlist-align">
                             <dt>Giảm giá:</dt>
-                            <dd class="text-right">200.000</dd>
+                            <dd class="text-right"><?php echo number_format($discount, 0, '.', ',') ?></dd>
+                            </dl>
+                            <dl class="dlist-align">
+                            <dt>Phí vận chuyển:</dt>
+                            <dd class="text-right" id="transport_fee"><?php echo $totalPrice >= 150000 ? 0 : 15000 ?></dd>
                             </dl>
                             <dl class="dlist-align">
                             <dt>Thành tiền:</dt>
-                            <dd class="text-right text-shop h5"><strong>368.000</strong></dd>
+                            <dd class="text-right text-shop h5"><strong id="need_pay"><?php echo number_format($totalPrice - $discount + ($totalPrice >= 150000 ? 0 : 15000), 0, '.', ',') ?></strong></dd>
                             </dl>
                             <hr>
                             <p class="text-center mb-3">
@@ -203,8 +220,4 @@
 
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
-<script>
-      $(document).ready(function(){
-
-      })
-</script>
+<script src="js/shop.js"></script>

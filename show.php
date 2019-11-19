@@ -139,7 +139,7 @@
             </aside> <!-- col.// -->
 
             <main class="col-md-9">
-                <div class="row product-main">
+                <div class="row product-main" data-id="<?php echo $product->id ?>">
                     <div class="col-md-6 product-image mt-3">
                         <div class="main-image">
                             <img src="images/<?php echo $product->main_images ?>" alt="" class="img-fluid">
@@ -181,7 +181,7 @@
                             <div class="change-quantity flex-fill">
                                 <span>Số lượng: </span>
                                 <span class="btn-action btn-shop btn-down"><i class="fa fa-minus"></i></span>
-                                <span class="btn-action current-quantity">1</span>
+                                <span class="btn-action" id="current-quantity">1</span>
                                 <span class="btn-action btn-shop btn-up"><i class="fa fa-plus"></i></span>
                                 
                             </div>
@@ -226,8 +226,4 @@
 
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
-<script>
-      $(document).ready(function(){
-
-      })
-</script>
+<script src="js/shop.js"></script>
