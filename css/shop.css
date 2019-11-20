@@ -103,9 +103,6 @@ ul {
 .product-header {
     border-bottom-color: #ff3c20 !important;
 }
-.product-item {
-    
-}
 .product-item .card {
     height: 200px;
     box-shadow:  0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
@@ -175,9 +172,6 @@ ul {
 .section-footer a, .section-footer a:hover, .section-footer a:focus, .section-footer a:active {
     color: #fff !important;
 }
-.footer-content {
-    
-}
 /* ========================= End Footer ========================= */
 
 
@@ -224,9 +218,6 @@ ul {
 
 
 /* ========================= SHOW PRODUCT PAGE ========================= */
-.show-product-content {
-
-}
 .show-product-content .product-image .main-image img {
     width: 90%;
     height: auto;

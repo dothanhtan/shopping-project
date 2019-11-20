@@ -123,11 +123,29 @@ $(document).ready(function(){
 
     /* Star: Change quantity in cart page */
     $(".cart-list").on("click", ".btn-down, .btn-up", function() {
+        id = $(this).parents("tr").data("id");
         quantity = parseInt($(this).parents(".cart-item").find(".current-quantity").text());
         price = parseInt($(this).parents(".cart-item").find(".price").text().split(",").join(""));
+
+        // Handle cookie
+        cookies = document.cookie.split(";");
+        listCart = cookies.filter(cookie =>{
+            return cookie.toString().includes("shop_cart")
+        })[0];
+        carts = listCart.replace("shop_cart=[", "").replace("]", "").split(";")[0].split("},").join("}#").split("#");
+        newCarts = [];
         if($(this).hasClass("btn-down")){
             if(quantity > 1) {
-                /* save to cookie */
+                /* apply change to cookie */
+                carts.forEach(cart => {
+                    if(cart.includes('"id":' + id)) {
+                        newCarts.push(cart.split('y":')[0] + 'y":' + (quantity - 1) + "}");
+                    }
+                    else {
+                        newCarts.push(cart);
+                    }
+                });
+                document.cookie = "shop_cart=[" + newCarts + "]";
 
                 /* update in view */
                 price -= price/quantity;
@@ -149,6 +167,18 @@ $(document).ready(function(){
             }
         }
         else {
+            /* apply change to cookie */
+            carts.forEach(cart => {
+                if(cart.includes('"id":' + id)) {
+                    newCarts.push(cart.split('y":')[0] + 'y":' + (quantity + 1) + "}");
+                }
+                else {
+                    newCarts.push(cart);
+                }
+            });
+            document.cookie = "shop_cart=[" + newCarts + "]";
+
+            /* update in view */
             price += price/quantity;
             quantity += 1;
             $(this).parents(".cart-item").find(".current-quantity").text(quantity);
@@ -162,8 +192,51 @@ $(document).ready(function(){
             else {
                 $("#need_pay").text(currency_format(totalMoney + price/quantity + 15000));
             }
-        }
-        
+        }       
     })
     /* End: Change uquantity in cart page */
+
+    /* Star: Delete cart item */
+    $(document).on("click", ".btn-delete-from-cart", function(){
+
+        // Get value
+        id = $(this).parents("tr").data("id");
+        quantity = parseInt($(this).parents("tr").find(".current-quantity").text());
+        price = parseInt($(this).parents("tr").find(".price").text().split(",").join(""));
+
+        // Handle Cookie
+        cookies = document.cookie.split(";");
+        listCart = cookies.filter(cookie =>{
+            return cookie.toString().includes("shop_cart")
+        })[0];
+        carts = listCart.replace("shop_cart=[", "").replace("]", "").split(";")[0].split("},").join("}#").split("#");
+        newCarts = [];
+        carts.forEach(cart => {
+            if(!cart.includes('"id":' + id)) {
+                newCarts.push(cart);
+            };
+        });
+
+        // Reset Cookie
+        if(newCarts.length > 0) {
+            document.cookie = "shop_cart=[" + newCarts + "]";
+        }
+        else {
+            document.cookie = "shop_cart=[ ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+        }
+
+        // Handle View
+        $(this).parents("tr").remove();
+        totalMoney = parseInt($("#total_money").text().split(",").join(""));
+        $("#total_money").text(currency_format(totalMoney - price));
+        if(totalMoney - price >= 150000) {
+            $("#transport_fee").text("0");
+            $("#need_pay").text(currency_format(totalMoney - price));
+        }
+        else {
+            $("#transport_fee").text("15,000");
+            $("#need_pay").text(currency_format(totalMoney - price + 15000));
+        }
+    })
+    /* End delete cart item */
 })
