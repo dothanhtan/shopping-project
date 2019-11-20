@@ -27,12 +27,12 @@
     $page = 1;
     if(isset($_REQUEST["page"])) {
         $page = $_REQUEST["page"];
-        if (sizeof($products) > $page * $product_per_page) {
-            $products = array_slice($products, $page * $product_per_page - $product_per_page, $product_per_page);
-        } else {
-            $products = array_slice($products, $page * $product_per_page - $product_per_page, sizeof($products));
-        }
-    }    
+    }
+    if (sizeof($products) > $page * $product_per_page) {
+        $products = array_slice($products, $page * $product_per_page - $product_per_page, $product_per_page);
+    } else {
+        $products = array_slice($products, $page * $product_per_page - $product_per_page, sizeof($products));
+    }  
 ?>
 
 <header class="section-header">
