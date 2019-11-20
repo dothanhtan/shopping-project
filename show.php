@@ -140,7 +140,7 @@
 
             <main class="col-md-9">
                 <div class="row product-main" data-id="<?php echo $product->id ?>">
-                    <div class="col-md-6 product-image mt-3">
+                    <div class="col-md-6 product-image mt-3 py-3">
                         <div class="main-image">
                             <img src="images/<?php echo $product->main_images ?>" alt="" class="img-fluid">
                         </div>
@@ -152,7 +152,7 @@
                             <?php } ?>
                         </div>
                     </div>
-                    <div class="col-md-6 product-info mt-3 pl-4">
+                    <div class="col-md-6 product-info mt-3 pl-4 py-3">
                         <h5 class="card-title product-name"><?php echo $product->name ?></h5>
                         <p class="text-muted">
                             <small>Phân loại: </small>

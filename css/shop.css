@@ -253,10 +253,12 @@ ul {
 }
 .product-image, .product-info {
     transition: 0.3s;
+    border-radius: 30px;
 }
 .product-image:hover, .product-info:hover {
     box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
     transform: scale(1.02);
+    border-radius: 30px;
     transition: 0.3s;
 }
 

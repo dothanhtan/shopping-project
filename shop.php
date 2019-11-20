@@ -20,7 +20,19 @@
     else {
         $products = Product::getProduct();
     }
-    
+
+    $total_product = sizeof($products);
+    $product_per_page = 6;
+    $count_of_page = ($total_product % $product_per_page == 0) ? $total_product / $product_per_page : floor($total_product / $product_per_page) + 1;
+    $page = 1;
+    if(isset($_REQUEST["page"])) {
+        $page = $_REQUEST["page"];
+        if (sizeof($products) > $page * $product_per_page) {
+            $products = array_slice($products, $page * $product_per_page - $product_per_page, $product_per_page);
+        } else {
+            $products = array_slice($products, $page * $product_per_page - $product_per_page, sizeof($products));
+        }
+    }    
 ?>
 
 <header class="section-header">
@@ -241,11 +253,9 @@
 
                 <nav class="mt-4" aria-label="Page navigation sample">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    <?php for($i = 1; $i <= $count_of_page; $i++) { ?>
+                    <li class="page-item <?php echo $i == $page ? "active" : "" ?>"><a class="page-link" href="shop.php?page=<?php echo $i ?>"><?php echo $i ?></a></li>
+                    <?php } ?>
                 </ul>
                 </nav>
 

@@ -144,6 +144,9 @@ $(document).ready(function(){
                     $("#need_pay").text(currency_format(totalMoney - price/quantity));
                 }
             }
+            else {
+                $.alert("Số lượng không thể nhỏ hơn 1");
+            }
         }
         else {
             price += price/quantity;
