@@ -41,7 +41,7 @@
         <div class="container py-3">
             <div class="row align-items-center">
                 <div class="col-lg-2 col-4">
-                    <a href="http://bootstrap-ecommerce.com" class="brand-wrap">
+                    <a href="shop.php" class="brand-wrap">
                         <img src="images/branch.png" width="180">  
                     </a> <!-- brand-wrap.// -->
                 </div>
@@ -253,9 +253,15 @@
 
                 <nav class="mt-4" aria-label="Page navigation sample">
                 <ul class="pagination justify-content-center">
-                    <?php for($i = 1; $i <= $count_of_page; $i++) { ?>
+                    <?php for($i = 1; $i <= $count_of_page; $i++) { 
+                        if(isset($_REQUEST["category_id"])) {
+                    ?>
+                    <li class="page-item <?php echo $i == $page ? "active" : "" ?>"><a class="page-link" href="shop.php?category_id=<?php echo  $_REQUEST["category_id"]?>&page=<?php echo $i ?>"><?php echo $i ?></a></li>
+                    <?php } else if(isset($_REQUEST["product_info"])) {?>
+                    <li class="page-item <?php echo $i == $page ? "active" : "" ?>"><a class="page-link" href="shop.php?product_info=<?php echo  $_REQUEST["product_info"]?>&page=<?php echo $i ?>"><?php echo $i ?></a></li>
+                    <?php } else { ?>
                     <li class="page-item <?php echo $i == $page ? "active" : "" ?>"><a class="page-link" href="shop.php?page=<?php echo $i ?>"><?php echo $i ?></a></li>
-                    <?php } ?>
+                    <?php } } ?>
                 </ul>
                 </nav>
 
