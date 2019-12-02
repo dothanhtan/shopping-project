@@ -5,8 +5,12 @@
  */
 function setCookie(value) {
     cookies = document.cookie.split(";");
-    exist = false; // check shop_cart isCreated?
-    status = false; // add to cookie success or fail
+    var exist = false; // check shop_cart isCreated?
+    var status = false; // add to cookie success or fail
+    var now = new Date();
+    var time = now.getTime();
+    var expireTime = time + 1000*60*60*24*30;
+    now.setTime(expireTime)
     cookies.forEach(cookie => {
         key = cookie.split("=")[0].trim();
         if(key == "shop_cart") {
@@ -20,8 +24,8 @@ function setCookie(value) {
             }).length > 0 ? true : false 
 
             if(!checkInCart) {
-                products.push(value);               
-                document.cookie = "shop_cart" + "=" + JSON.stringify(products);
+                products.push(value);             
+                document.cookie = "shop_cart" + "=" + JSON.stringify(products) + "; expires=" + now.toGMTString();
                 status = true;
             }
         }
@@ -31,7 +35,7 @@ function setCookie(value) {
     }
     else {
         product = [value];
-        document.cookie = "shop_cart" + "=" + JSON.stringify(product);
+        document.cookie = "shop_cart" + "=" + JSON.stringify(product) + "; expires=" + now.toGMTString();
         return true;
     }
     
@@ -42,7 +46,7 @@ function setCookie(value) {
  * @params status: status after set cookie  
  */
 function alertSetCookie(status) {
-    content = status == "true" ? "Thêm sản phẩm vào giỏ hàng thành công" : "Sản phẩm đã có trong giỏ hàng. Vui lòng đến trang giỏ hàng để tăng số lượng sản phẩm";
+    content = status == true ? "Thêm sản phẩm vào giỏ hàng thành công" : "Sản phẩm đã có trong giỏ hàng. Vui lòng đến trang giỏ hàng để tăng số lượng sản phẩm";
     $.confirm({
         icon: 'fas fa-exclamation-triangle fa-sm text-shop',
         title: 'Thông báo',
@@ -64,6 +68,9 @@ function alertSetCookie(status) {
             }
         }
     });
+    if(status == true) {
+        $(".notify").text(parseInt($(".notify").text()) + 1);
+    }
 }
 
 /***
@@ -86,7 +93,7 @@ $(document).ready(function(){
     /* Star: Add to cart in index page */
     $(".product-item").on("click", ".btn-add-to-cart", function() {
         product_id = $(this).parents(".product-item").data("id");
-        addSuccess = setCookie({
+        var addSuccess = setCookie({
             id: product_id,
             quantity: 1
         });
@@ -99,7 +106,7 @@ $(document).ready(function(){
     $(".product-main").on("click", ".btn-add-to-cart", function() {
         product_id = $(this).parents(".product-main").data("id");
         quantity = parseInt($("#current-quantity").text());
-        addSuccess = setCookie({
+        var addSuccess = setCookie({
             id: product_id,
             quantity: quantity
         });
@@ -222,7 +229,7 @@ $(document).ready(function(){
             document.cookie = "shop_cart=[" + newCarts + "]";
         }
         else {
-            document.cookie = "shop_cart=[ ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+            document.cookie = "shop_cart=; expires=01 Jan 1970 00:00:00 UTC";
         }
 
         // Handle View

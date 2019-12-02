@@ -9,10 +9,20 @@
     include_once('header.php');
     include_once('model/category.php');
     include_once('model/product.php');
+    include_once('model/cart.php');
     $categories = Category::getCategory();
     $product = Product::getProductByID($_REQUEST["product_id"]);
     $images = explode( ';', $product->other_images);
     $category = $product->category($product->category_id);
+
+    $totalInCart = 0;
+    if(isset($_COOKIE['shop_cart'])) {
+        $str_cookie = '{"products": ' . $_COOKIE['shop_cart'] . "}";
+        $carts = Cart::parseCookie($str_cookie);
+        if(json_decode($str_cookie) != null) {
+            $totalInCart = sizeof(json_decode($str_cookie)->products);
+        }
+    }
 ?>
 <header class="section-header">
 
@@ -40,7 +50,7 @@
                     <div class="widgets-wrap float-md-right row user-manage">
                         <div class="widget-header col-sm-3">
                             <a href="cart.php" class="icon-cart"><i class="fa fa-shopping-cart"></i></a>
-                            <span class="badge badge-pill badge-info notify">0</span>
+                            <span class="badge badge-pill badge-info notify"><?php echo $totalInCart ?></span>
                         </div>
                         <div class="widget-header user-session col-sm-9">
                             <a href="#" class="icon icon-user"><i class="fa fa-user"></i></a>

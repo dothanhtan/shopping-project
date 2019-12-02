@@ -6,6 +6,7 @@
     include_once('model/user.php');
     include_once('model/category.php');
     include_once('model/product.php');
+    include_once('model/cart.php');
     
     $current_user = unserialize($_SESSION["user"]); 
     include_once('header.php');
@@ -32,7 +33,16 @@
         $products = array_slice($products, $page * $product_per_page - $product_per_page, $product_per_page);
     } else {
         $products = array_slice($products, $page * $product_per_page - $product_per_page, sizeof($products));
-    }  
+    }
+    
+    $totalInCart = 0;
+    if(isset($_COOKIE['shop_cart'])) {
+        $str_cookie = '{"products": ' . $_COOKIE['shop_cart'] . "}";
+        $carts = Cart::parseCookie($str_cookie);
+        if(json_decode($str_cookie) != null) {
+            $totalInCart = sizeof(json_decode($str_cookie)->products);
+        }
+    }
 ?>
 
 <header class="section-header">
@@ -61,7 +71,7 @@
                     <div class="widgets-wrap float-md-right row user-manage">
                         <div class="widget-header col-sm-3">
                             <a href="cart" class="icon-cart"><i class="fa fa-shopping-cart"></i></a>
-                            <span class="badge badge-pill badge-info notify">0</span>
+                            <span class="badge badge-pill badge-info notify"><?php echo $totalInCart ?></span>
                         </div>
                         <div class="widget-header user-session col-sm-9">
                             <a href="#" class="icon icon-user"><i class="fa fa-user"></i></a>
